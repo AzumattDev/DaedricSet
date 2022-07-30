@@ -15,7 +15,7 @@ namespace DaedricSet
     {
         internal const string ModName = "DaedricSet";
         internal const string ModVersion = "1.0.0";
-        internal const string Author = "azumatt";
+        internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
         private static string ConfigFileName = ModGUID + ".cfg";
         private static string ConfigFileFullPath = Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
@@ -34,91 +34,90 @@ namespace DaedricSet
         {
             _serverConfigLocked = config("General", "Force Server Config", true, "Force Server Config");
             _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
-            
+
             Item DaedricBattleAxe = new("daedricweapons", "DaedricBattleaxe");
-            DaedricBattleAxe.Name.English("Daedric Battle Axe"); 
+            DaedricBattleAxe.Name.English("Daedric Battle Axe");
             DaedricBattleAxe.Description.English("A short poky stick from skyrim.");
-            DaedricBattleAxe.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricBattleAxe.Crafting.Add(CraftingTable.Forge, 3);
             DaedricBattleAxe.RequiredItems.Add("Iron", 120);
             DaedricBattleAxe.RequiredItems.Add("WolfFang", 20);
             DaedricBattleAxe.RequiredItems.Add("Silver", 40);
-            DaedricBattleAxe.RequiredUpgradeItems.Add("Iron", 20); 
-            DaedricBattleAxe.RequiredUpgradeItems.Add("Silver", 10); 
-            DaedricBattleAxe.CraftAmount = 2;
+            DaedricBattleAxe.RequiredUpgradeItems.Add("Iron", 20);
+            DaedricBattleAxe.RequiredUpgradeItems.Add("Silver", 10);
 
             Item DaedricDagger = new("daedricweapons", "DaedricDagger");
-            DaedricDagger.Name.English("Daedric Dagger"); 
+            DaedricDagger.Name.English("Daedric Dagger");
             DaedricDagger.Description.English("A short poky stick from skyrim.");
-            DaedricDagger.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricDagger.Crafting.Add(CraftingTable.Forge, 3);
             DaedricDagger.RequiredItems.Add("Iron", 120);
             DaedricDagger.RequiredItems.Add("WolfFang", 20);
             DaedricDagger.RequiredItems.Add("Silver", 40);
-            DaedricDagger.RequiredUpgradeItems.Add("Iron", 20); 
-            DaedricDagger.RequiredUpgradeItems.Add("Silver", 10); 
+            DaedricDagger.RequiredUpgradeItems.Add("Iron", 20);
+            DaedricDagger.RequiredUpgradeItems.Add("Silver", 10);
             DaedricDagger.CraftAmount = 2;
-            
+
             Item DaedricGlaive = new("daedricweapons", "DaedricGlaive");
-            DaedricGlaive.Name.English("Daedric Glaive"); 
+            DaedricGlaive.Name.English("Daedric Glaive");
             DaedricGlaive.Description.English("A short poky stick from skyrim.");
-            DaedricGlaive.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricGlaive.Crafting.Add(CraftingTable.Forge, 3);
             DaedricGlaive.RequiredItems.Add("Iron", 120);
             DaedricGlaive.RequiredItems.Add("WolfFang", 20);
             DaedricGlaive.RequiredItems.Add("Silver", 40);
-            DaedricGlaive.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricGlaive.RequiredUpgradeItems.Add("Iron", 20);
             DaedricGlaive.RequiredUpgradeItems.Add("Silver", 10);
-            
+
             Item DaedricGreatsword = new("daedricweapons", "DaedricGreatsword");
-            DaedricGreatsword.Name.English("Daedric Greatsword"); 
+            DaedricGreatsword.Name.English("Daedric Greatsword");
             DaedricGreatsword.Description.English("A short poky stick from skyrim.");
-            DaedricGreatsword.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricGreatsword.Crafting.Add(CraftingTable.Forge, 3);
             DaedricGreatsword.RequiredItems.Add("Iron", 120);
             DaedricGreatsword.RequiredItems.Add("WolfFang", 20);
             DaedricGreatsword.RequiredItems.Add("Silver", 40);
-            DaedricGreatsword.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricGreatsword.RequiredUpgradeItems.Add("Iron", 20);
             DaedricGreatsword.RequiredUpgradeItems.Add("Silver", 10);
-            
-            
+
+
             Item DaedricHalberd = new("daedricweapons", "DaedricHalberd");
-            DaedricHalberd.Name.English("Daedric Halberd"); 
+            DaedricHalberd.Name.English("Daedric Halberd");
             DaedricHalberd.Description.English("A short poky stick from skyrim.");
-            DaedricHalberd.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricHalberd.Crafting.Add(CraftingTable.Forge, 3);
             DaedricHalberd.RequiredItems.Add("Iron", 120);
             DaedricHalberd.RequiredItems.Add("WolfFang", 20);
             DaedricHalberd.RequiredItems.Add("Silver", 40);
-            DaedricHalberd.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricHalberd.RequiredUpgradeItems.Add("Iron", 20);
             DaedricHalberd.RequiredUpgradeItems.Add("Silver", 10);
-            
+
             Item DaedricHatchet = new("daedricweapons", "DaedricHatchet");
-            DaedricHatchet.Name.English("Daedric Hatchet"); 
+            DaedricHatchet.Name.English("Daedric Hatchet");
             DaedricHatchet.Description.English("A short poky stick from skyrim.");
-            DaedricHatchet.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricHatchet.Crafting.Add(CraftingTable.Forge, 3);
             DaedricHatchet.RequiredItems.Add("Iron", 120);
             DaedricHatchet.RequiredItems.Add("WolfFang", 20);
             DaedricHatchet.RequiredItems.Add("Silver", 40);
-            DaedricHatchet.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricHatchet.RequiredUpgradeItems.Add("Iron", 20);
             DaedricHatchet.RequiredUpgradeItems.Add("Silver", 10);
             DaedricHatchet.CraftAmount = 2;
-            
+
             Item DaedricSkeletonClub = new("daedricweapons", "DaedricSkeletonClub");
-            DaedricSkeletonClub.Name.English("Daedric Skeleton Club"); 
+            DaedricSkeletonClub.Name.English("Daedric Skeleton Club");
             DaedricSkeletonClub.Description.English("A short poky stick from skyrim.");
-            DaedricSkeletonClub.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricSkeletonClub.Crafting.Add(CraftingTable.Forge, 3);
             DaedricSkeletonClub.RequiredItems.Add("Iron", 120);
             DaedricSkeletonClub.RequiredItems.Add("WolfFang", 20);
             DaedricSkeletonClub.RequiredItems.Add("Silver", 40);
-            DaedricSkeletonClub.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricSkeletonClub.RequiredUpgradeItems.Add("Iron", 20);
             DaedricSkeletonClub.RequiredUpgradeItems.Add("Silver", 10);
-            
+
             Item DaedricMace = new("daedricweapons", "DaedricMace");
-            DaedricMace.Name.English("Daedric Mace"); 
+            DaedricMace.Name.English("Daedric Mace");
             DaedricMace.Description.English("A short poky stick from skyrim.");
-            DaedricMace.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricMace.Crafting.Add(CraftingTable.Forge, 3);
             DaedricMace.RequiredItems.Add("Iron", 120);
             DaedricMace.RequiredItems.Add("WolfFang", 20);
             DaedricMace.RequiredItems.Add("Silver", 40);
-            DaedricMace.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricMace.RequiredUpgradeItems.Add("Iron", 20);
             DaedricMace.RequiredUpgradeItems.Add("Silver", 10);
-            
+
             /*Item DaedricShortSpear = new("daedricweapons", "DaedricShortSpear");
             DaedricShortSpear.Name.English("Daedric Short Spear"); 
             DaedricShortSpear.Description.English("A short poky stick from skyrim.");
@@ -148,19 +147,19 @@ namespace DaedricSet
             DaedricStaff.RequiredItems.Add("WolfFang", 20);
             DaedricStaff.RequiredItems.Add("Silver", 40);
             DaedricStaff.RequiredUpgradeItems.Add("Iron", 20); 
-            DaedricStaff.RequiredUpgradeItems.Add("Silver", 10);
-            
+            DaedricStaff.RequiredUpgradeItems.Add("Silver", 10);*/
+
             Item DaedricSword = new("daedricweapons", "DaedricSword");
-            DaedricSword.Name.English("Daedric Sword"); 
+            DaedricSword.Name.English("Daedric Sword");
             DaedricSword.Description.English("A poky stick from skyrim.");
-            DaedricSword.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricSword.Crafting.Add(CraftingTable.Forge, 3);
             DaedricSword.RequiredItems.Add("Iron", 120);
             DaedricSword.RequiredItems.Add("WolfFang", 20);
             DaedricSword.RequiredItems.Add("Silver", 40);
-            DaedricSword.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricSword.RequiredUpgradeItems.Add("Iron", 20);
             DaedricSword.RequiredUpgradeItems.Add("Silver", 10);
-            
-            Item DaedricWarAxe = new("daedricweapons", "DaedricWarAxe");
+
+            /*Item DaedricWarAxe = new("daedricweapons", "DaedricWarAxe");
             DaedricWarAxe.Name.English("Daedric Sword"); 
             DaedricWarAxe.Description.English("A poky stick from skyrim.");
             DaedricWarAxe.Crafting.Add(CraftingTable.Forge,3); 

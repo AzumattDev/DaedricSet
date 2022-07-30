@@ -38,6 +38,9 @@ public class RequiredResourceList
 
     public void Add(string itemName, int amount) =>
         Requirements.Add(new Requirement { itemName = itemName, amount = amount });
+
+    public void Add(string itemName, ConfigEntry<int> amountConfig) =>
+        Requirements.Add(new Requirement { itemName = itemName, amountConfig = amountConfig });
 }
 
 [PublicAPI]
@@ -59,12 +62,14 @@ public class ItemRecipe
     public readonly RequiredResourceList RequiredUpgradeItems = new();
     public readonly CraftingStationList Crafting = new();
     public int CraftAmount = 1;
+    public ConfigEntryBase? RecipeIsActive = null;
 }
 
 public struct Requirement
 {
     public string itemName;
     public int amount;
+    public ConfigEntry<int>? amountConfig;
 }
 
 public struct CraftingStationConfig
@@ -89,7 +94,7 @@ public class Item
 
     private static readonly List<Item> registeredItems = new();
     private static readonly Dictionary<ItemDrop, Item> itemDropMap = new();
-    private static Dictionary<Item, List<Recipe>> activeRecipes = new();
+    private static Dictionary<Item, Dictionary<string, List<Recipe>>> activeRecipes = new();
     private static Dictionary<Item, Dictionary<string, ItemConfig>> itemCraftConfigs = new();
 
     public static bool ConfigurationEnabled = true;
@@ -108,6 +113,13 @@ public class Item
     [Description(
         "Specifies the crafting station needed to craft the item.\nUse .Add to add a crafting station, using the CraftingTable enum and a minimum level for the crafting station.\nUse one .Add for each crafting station.")]
     public CraftingStationList Crafting => this[""].Crafting;
+
+    [Description("Specifies a config entry which toggles whether a recipe is active.")]
+    public ConfigEntryBase? RecipeIsActive
+    {
+        get => this[""].RecipeIsActive;
+        set => this[""].RecipeIsActive = value;
+    }
 
     [Description(
         "Specifies the number of items that should be given to the player with a single craft of the item.\nDefaults to 1.")]
@@ -195,9 +207,19 @@ public class Item
     {
     }
 
-    public Item(AssetBundle bundle, string prefabName)
+    public Item(AssetBundle bundle, string prefabName) : this(PrefabManager.RegisterPrefab(bundle, prefabName, true),
+        true)
     {
-        Prefab = PrefabManager.RegisterPrefab(bundle, prefabName, true);
+    }
+
+    public Item(GameObject prefab, bool skipRegistering = false)
+    {
+        if (!skipRegistering)
+        {
+            PrefabManager.RegisterPrefab(prefab, true);
+        }
+
+        Prefab = prefab;
         registeredItems.Add(this);
         itemDropMap[Prefab.GetComponent<ItemDrop>()] = this;
     }
@@ -263,20 +285,21 @@ public class Item
 
                         void TableConfigChanged(object o, EventArgs e)
                         {
-                            if (activeRecipes.Count > 0)
+                            if (activeRecipes.ContainsKey(item) &&
+                                activeRecipes[item].TryGetValue(configKey, out List<Recipe> recipes))
                             {
                                 if (cfg.table.Value is CraftingTable.None)
                                 {
-                                    activeRecipes[item].First().m_craftingStation = null;
+                                    recipes.First().m_craftingStation = null;
                                 }
                                 else if (cfg.table.Value is CraftingTable.Custom)
                                 {
-                                    activeRecipes[item].First().m_craftingStation = ZNetScene.instance
+                                    recipes.First().m_craftingStation = ZNetScene.instance
                                         .GetPrefab(cfg.customTable.Value)?.GetComponent<CraftingStation>();
                                 }
                                 else
                                 {
-                                    activeRecipes[item].First().m_craftingStation = ZNetScene.instance
+                                    recipes.First().m_craftingStation = ZNetScene.instance
                                         .GetPrefab(
                                             ((InternalName)typeof(CraftingTable).GetMember(cfg.table.Value.ToString())
                                                 [0].GetCustomAttributes(typeof(InternalName)).First()).internalName)
@@ -307,9 +330,10 @@ public class Item
                                 tableLevelAttributes));
                         cfg.tableLevel.SettingChanged += (_, _) =>
                         {
-                            if (activeRecipes.Count > 0)
+                            if (activeRecipes.ContainsKey(item) &&
+                                activeRecipes[item].TryGetValue(configKey, out List<Recipe> recipes))
                             {
-                                activeRecipes[item].First().m_minStationLevel = cfg.tableLevel.Value;
+                                recipes.First().m_minStationLevel = cfg.tableLevel.Value;
                             }
                         };
                         if (item.Prefab.GetComponent<ItemDrop>().m_itemData.m_shared.m_maxQuality > 1)
@@ -347,9 +371,10 @@ public class Item
 
                         void ConfigChanged(object o, EventArgs e)
                         {
-                            if (ObjectDB.instance && activeRecipes.ContainsKey(item))
+                            if (ObjectDB.instance && activeRecipes.ContainsKey(item) &&
+                                activeRecipes[item].TryGetValue(configKey, out List<Recipe> recipes))
                             {
-                                foreach (Recipe recipe in activeRecipes[item])
+                                foreach (Recipe recipe in recipes)
                                 {
                                     recipe.m_resources = SerializedRequirements.toPieceReqs(ObjectDB.instance,
                                         new SerializedRequirements(cfg.craft.Value),
@@ -373,6 +398,57 @@ public class Item
                 plugin.Config.Save();
             }
         }
+
+        foreach (Item item in registeredItems)
+        {
+            foreach (KeyValuePair<string, ItemRecipe> kv in item.Recipes)
+            {
+                foreach (RequiredResourceList resourceList in new[]
+                             { kv.Value.RequiredItems, kv.Value.RequiredUpgradeItems })
+                {
+                    for (int i = 0; i < resourceList.Requirements.Count; ++i)
+                    {
+                        if ((!ConfigurationEnabled || !item.Configurable) &&
+                            resourceList.Requirements[i].amountConfig is { } amountCfg)
+                        {
+                            int resourceIndex = i;
+
+                            void ConfigChanged(object o, EventArgs e)
+                            {
+                                if (ObjectDB.instance && activeRecipes.ContainsKey(item) &&
+                                    activeRecipes[item].TryGetValue(kv.Key, out List<Recipe> recipes))
+                                {
+                                    foreach (Recipe recipe in recipes)
+                                    {
+                                        recipe.m_resources[resourceIndex].m_amount = amountCfg.Value;
+                                    }
+                                }
+                            }
+
+                            amountCfg.SettingChanged += ConfigChanged;
+                        }
+                    }
+                }
+
+                if (kv.Value.RecipeIsActive is { } enabledCfg)
+                {
+                    void ConfigChanged(object o, EventArgs e)
+                    {
+                        if (ObjectDB.instance && activeRecipes.ContainsKey(item) &&
+                            activeRecipes[item].TryGetValue(kv.Key, out List<Recipe> recipes))
+                        {
+                            foreach (Recipe recipe in recipes)
+                            {
+                                recipe.m_enabled = (int)enabledCfg.BoxedValue != 0;
+                            }
+                        }
+                    }
+
+                    enabledCfg.GetType().GetEvent(nameof(ConfigEntry<int>.SettingChanged))
+                        .AddEventHandler(enabledCfg, new EventHandler(ConfigChanged));
+                }
+            }
+        }
     }
 
     [HarmonyPriority(Priority.Last)]
@@ -385,11 +461,13 @@ public class Item
 
         foreach (Item item in registeredItems)
         {
-            List<Recipe> recipes = new();
+            activeRecipes[item] = new Dictionary<string, List<Recipe>>();
 
             itemCraftConfigs.TryGetValue(item, out Dictionary<string, ItemConfig> cfgs);
             foreach (KeyValuePair<string, ItemRecipe> kv in item.Recipes)
             {
+                List<Recipe> recipes = new();
+
                 foreach (CraftingStationConfig station in kv.Value.Crafting.Stations)
                 {
                     ItemConfig? cfg = cfgs?[kv.Key];
@@ -435,14 +513,14 @@ public class Item
                     }
 
                     recipe.m_minStationLevel = cfg == null || recipes.Count > 0 ? station.level : cfg.tableLevel.Value;
+                    recipe.m_enabled = (int)(kv.Value.RecipeIsActive?.BoxedValue ?? 1) != 0;
 
                     recipes.Add(recipe);
                 }
+
+                activeRecipes[item].Add(kv.Key, recipes);
+                __instance.m_recipes.AddRange(recipes);
             }
-
-            activeRecipes[item] = recipes;
-
-            __instance.m_recipes.AddRange(recipes);
         }
     }
 
@@ -599,7 +677,8 @@ public class Item
             Dictionary<string, Piece.Requirement?> resources = craft.Reqs.Where(r => r.itemName != "")
                 .ToDictionary(r => r.itemName,
                     r => ResItem(r) is { } item
-                        ? new Piece.Requirement { m_amount = r.amount, m_resItem = item, m_amountPerLevel = 0 }
+                        ? new Piece.Requirement
+                            { m_amount = r.amountConfig?.Value ?? r.amount, m_resItem = item, m_amountPerLevel = 0 }
                         : null);
             foreach (Requirement req in upgrade.Reqs.Where(r => r.itemName != ""))
             {
@@ -611,7 +690,7 @@ public class Item
 
                 if (requirement != null)
                 {
-                    requirement.m_amountPerLevel = req.amount;
+                    requirement.m_amountPerLevel = req.amountConfig?.Value ?? req.amount;
                 }
             }
 
@@ -791,6 +870,7 @@ public class LocalizeKey
     }
 }
 
+[PublicAPI]
 public static class PrefabManager
 {
     static PrefabManager()
@@ -849,10 +929,11 @@ public static class PrefabManager
         RegisterPrefab(string assetBundleFileName, string prefabName, string folderName = "assets") =>
         RegisterPrefab(RegisterAssetBundle(assetBundleFileName, folderName), prefabName);
 
-    public static GameObject RegisterPrefab(AssetBundle assets, string prefabName, bool addToObjectDb = false)
-    {
-        GameObject prefab = assets.LoadAsset<GameObject>(prefabName);
+    public static GameObject RegisterPrefab(AssetBundle assets, string prefabName, bool addToObjectDb = false) =>
+        RegisterPrefab(assets.LoadAsset<GameObject>(prefabName), addToObjectDb);
 
+    public static GameObject RegisterPrefab(GameObject prefab, bool addToObjectDb = false)
+    {
         if (addToObjectDb)
         {
             prefabs.Add(prefab);
