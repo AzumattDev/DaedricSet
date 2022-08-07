@@ -82,7 +82,7 @@ public struct CraftingStationConfig
 [PublicAPI]
 public class Item
 {
-    private class ItemConfig
+    internal class ItemConfig
     {
         public ConfigEntry<string> craft = null!;
         public ConfigEntry<string>? upgrade;
@@ -90,10 +90,42 @@ public class Item
         public ConfigEntry<int> tableLevel = null!;
         public ConfigEntry<string> customTable = null!;
         public ConfigEntry<int>? maximumTableLevel;
+        /* Damage */
+        public ConfigEntry<float> durability = null!;
+        public ConfigEntry<float> durabilityPerLevel = null!;
+        public ConfigEntry<float> useDurabilityDrain = null!;
+        public ConfigEntry<float> baseDamage = null!;
+        public ConfigEntry<int> baseBlunt = null!;
+        public ConfigEntry<float> baseSlash = null!;
+        public ConfigEntry<float> basePierce = null!;
+        public ConfigEntry<float> baseChop = null!;
+        public ConfigEntry<float> basePickaxe = null!;
+        public ConfigEntry<float> baseFire = null!;
+        public ConfigEntry<float> baseFrost = null!;
+        public ConfigEntry<float> baseLightning = null!;
+        public ConfigEntry<float> basePoison = null!;
+        public ConfigEntry<float> baseSpirit = null!;
+        public ConfigEntry<float> baseDamagePerPerLevel = null!;
+        public ConfigEntry<float> baseBluntPerLevel = null!;
+        public ConfigEntry<float> baseSlashPerLevel = null!;
+        public ConfigEntry<float> basePiercePerLevel = null!;
+        public ConfigEntry<float> baseChopPerLevel = null!;
+        public ConfigEntry<float> basePickaxePerLevel = null!;
+        public ConfigEntry<float> baseFirePerLevel = null!;
+        public ConfigEntry<float> baseFrostPerLevel = null!;
+        public ConfigEntry<float> baseLightningPerLevel = null!;
+        public ConfigEntry<float> basePoisonPerLevel = null!;
+        public ConfigEntry<float> baseSpiritPerLevel = null!;
+        public ConfigEntry<float> baseAttackForce = null!;
+        public ConfigEntry<float> baseBlockPower = null!; // block power
+        public ConfigEntry<float> baseParryForce = null!; // parry force
+        public ConfigEntry<float> baseKnockbackForce = null!; // knockback force
+        public ConfigEntry<float> baseBackstab = null!; // backstab
     }
 
-    private static readonly List<Item> registeredItems = new();
-    private static readonly Dictionary<ItemDrop, Item> itemDropMap = new();
+    internal static readonly List<Item> registeredItems = new();
+    internal static readonly Dictionary<ItemDrop, Item> itemDropMap = new();
+    internal static readonly Dictionary<Item, ItemConfig> itemConfigMap = new();
     private static Dictionary<Item, Dictionary<string, List<Recipe>>> activeRecipes = new();
     private static Dictionary<Item, Dictionary<string, ItemConfig>> itemCraftConfigs = new();
 
@@ -132,6 +164,9 @@ public class Item
     [Description(
         "Specifies the maximum required crafting station level to upgrade and repair the item.\nDefault is calculated from crafting station level and maximum quality.")]
     public int MaximumRequiredStationLevel = int.MaxValue;
+
+    [Description("Toggles whether or not to generate the weapon configurations for damage values.")]
+    public bool GenerateWeaponConfigs = true;
 
     public Dictionary<string, ItemRecipe> Recipes = new();
 
@@ -388,6 +423,126 @@ public class Item
                         {
                             cfg.upgrade.SettingChanged += ConfigChanged;
                         }
+                    }
+
+                    if (item.GenerateWeaponConfigs)
+                    {
+                        ItemDrop? itemdrop = item.Prefab.GetComponent<ItemDrop>();
+                        ItemDrop.ItemData.SharedData? sharedData = itemdrop.m_itemData.m_shared;
+                        string localizedName = Localization.instance.Localize(sharedData.m_name).Trim();
+                        HitData.DamageTypes damages = sharedData.m_damages;
+                        HitData.DamageTypes damagesPerLevel = sharedData.m_damagesPerLevel;
+                        cfg.durability = config($"{localizedName} Durability", "Max Durability", sharedData.m_maxDurability, $"Max Durability of {localizedName}");
+                        cfg.durabilityPerLevel = config($"{localizedName} DurabilityPerLevel", "DurabilityPerLevel", sharedData.m_durabilityPerLevel, $"Durability per level of {localizedName}");
+                        cfg.useDurabilityDrain = config($"{localizedName} UseDurabilityDrain", "Use Durability", sharedData.m_maxDurability, $"Use Durability of {localizedName}");
+                        cfg.baseDamage = config($"{localizedName} Damage", "Base Damage", damages.m_damage, $"Base damage of {localizedName}");
+                        cfg.baseBlunt = config($"{localizedName} Damage", "Base Blunt Damage", sharedData.m_toolTier, $"Base blunt damage of {localizedName}");
+                        cfg.baseSlash = config($"{localizedName} Damage", "Base Slash Damage", damages.m_slash, $"Base slash damage of {localizedName}");
+                        cfg.basePierce = config($"{localizedName} Damage", "Base Pierce Damage", damages.m_pierce, $"Base pierce damage of {localizedName}");
+                        cfg.baseChop = config($"{localizedName} Damage", "Base Chop Damage", damages.m_chop, $"Base chop damage of {localizedName}");
+                        cfg.basePickaxe = config($"{localizedName} Damage", "Base Pickaxe Damage", damages.m_pickaxe, "Base pickaxe damage of " + localizedName);
+                        cfg.baseFire = config($"{localizedName} Damage", "Base Fire Damage", damages.m_fire, "Base fire damage of " + localizedName);
+                        cfg.baseFrost = config($"{localizedName} Damage", "Base Frost Damage", damages.m_frost, "Base Frost damage of " + localizedName);
+                        cfg.baseLightning = config($"{localizedName} Damage", "Base Lightning Damage", damages.m_lightning, "Base Lightning damage of " + localizedName);
+                        cfg.basePoison = config($"{localizedName} Damage", "Base Poison Damage", damages.m_poison, "Base poison damage of " + localizedName);
+                        cfg.baseSpirit = config($"{localizedName} Damage", "Base Spirit Damage", damages.m_spirit, "Base spirit damage of " + localizedName);
+                        cfg.baseDamagePerPerLevel = config($"{localizedName} Damage", "Base Damage Per Level", damagesPerLevel.m_damage, "Base Damage Per Level of " + localizedName);
+                        cfg.baseBluntPerLevel = config($"{localizedName} Damage", "Base Blunt Damage Per Level", damagesPerLevel.m_blunt, "Base Blunt Damage Per Level of " + localizedName);
+                        cfg.baseSlashPerLevel = config($"{localizedName} Damage", "Base Slash Damage Per Level", damagesPerLevel.m_slash, "Base Slash Damage Per Level of " + localizedName);
+                        cfg.basePiercePerLevel = config($"{localizedName} Damage", "Base Pierce Damage Per Level", damagesPerLevel.m_pierce, "Base Pierce Damage Per Level of " + localizedName);
+                        cfg.baseChopPerLevel = config($"{localizedName} Damage", "Base Chop Damage Per Level", damagesPerLevel.m_chop, "Base Chop Damage Per Level of " + localizedName);
+                        cfg.basePickaxePerLevel = config($"{localizedName} Damage", "Base Pickaxe Damage Per Level", damagesPerLevel.m_pickaxe, "Base Pickaxe Damage Per Level of " + localizedName);
+                        cfg.baseFirePerLevel = config($"{localizedName} Damage", "Base Fire Damage Per Level", damagesPerLevel.m_fire, "Base Fire Damage Per Level of " + localizedName);
+                        cfg.baseFrostPerLevel = config($"{localizedName} Damage", "Base Frost Damage Per Level", damagesPerLevel.m_frost, "Base Frost Damage Per Level of " + localizedName);
+                        cfg.baseLightningPerLevel = config($"{localizedName} Damage", "Base Lightning Damage Per Level", damagesPerLevel.m_lightning, "Base Lightning Damage Per Level of " + localizedName);
+                        cfg.basePoisonPerLevel = config($"{localizedName} Damage", "Base Poison Damage Per Level", damagesPerLevel.m_poison, "Base Poison Damage Per Level of " + localizedName);
+                        cfg.baseSpiritPerLevel = config($"{localizedName} Damage", "Base Spirit Damage Per Level", damagesPerLevel.m_spirit, "Base Spirit Damage Per Level of " + localizedName);
+                        cfg.baseAttackForce = config($"{localizedName} Damage", "Base Attack Force (a.k.a Knockback)", sharedData.m_attackForce, "Base Attack Force (a.k.a Knockback) of " + localizedName);
+                        cfg.baseBlockPower = config($"{localizedName} Damage", "Base Block Power", sharedData.m_blockPower, "Base Block Power of " + localizedName);
+                        cfg.baseParryForce = config($"{localizedName} Damage", "Base Parry Force", sharedData.m_deflectionForce, "Base Parry Force of " + localizedName);
+                        cfg.baseBackstab = config($"{localizedName} Damage", "Base Backstab Bonus", sharedData.m_backstabBonus, "Base Backstab Bonus of " + localizedName);
+
+                        cfg.durability.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.durabilityPerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.useDurabilityDrain.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseDamage.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseDamage.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseBlunt.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseSlash.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.basePierce.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseChop.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.basePickaxe.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseFire.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseFrost.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseLightning.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.basePoison.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseSpirit.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseDamagePerPerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseBluntPerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseSlashPerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.basePiercePerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseChopPerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.basePickaxePerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseFirePerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseFrostPerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseLightningPerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.basePoisonPerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseSpiritPerLevel.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseAttackForce.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseBlockPower.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseParryForce.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                        cfg.baseBackstab.SettingChanged += ((sender, e) => SetUpDamage(sender, e, itemdrop));
+                    }
+
+                    void SetUpDamage(object o, EventArgs e, ItemDrop itmdrop)
+                    {
+                        foreach (ItemDrop? weapon in Resources.FindObjectsOfTypeAll<ItemDrop>().Where(i =>
+                                     i.m_itemData.m_shared.m_name == itmdrop.m_itemData.m_shared.m_name))
+                        {
+                            SetUpDamageValues(weapon.m_itemData);
+                        }
+
+                        foreach (ItemDrop.ItemData? invWeaponData in Player.m_localPlayer.GetInventory().GetAllItems()
+                                     .Where(i =>
+                                         i.m_shared.m_name == itmdrop.m_itemData.m_shared.m_name))
+                        {
+                            SetUpDamageValues(invWeaponData);
+                        }
+                    }
+
+                    void SetUpDamageValues(ItemDrop.ItemData weapon)
+                    {
+                        ItemDrop.ItemData.SharedData? sharedData = weapon.m_shared;
+                        sharedData.m_maxDurability = cfg.durability.Value;
+                        sharedData.m_durabilityPerLevel = cfg.durabilityPerLevel.Value;
+                        sharedData.m_useDurabilityDrain = cfg.useDurabilityDrain.Value;
+                        sharedData.m_damages.m_damage = cfg.baseDamage.Value;
+                        sharedData.m_toolTier = cfg.baseBlunt.Value;
+                        sharedData.m_damages.m_blunt = cfg.baseBlunt.Value;
+                        sharedData.m_damages.m_slash = cfg.baseSlash.Value;
+                        sharedData.m_damages.m_pierce = cfg.basePierce.Value;
+                        sharedData.m_damages.m_chop = cfg.baseChop.Value;
+                        sharedData.m_damages.m_pickaxe = cfg.basePickaxe.Value;
+                        sharedData.m_damages.m_fire = cfg.baseFire.Value;
+                        sharedData.m_damages.m_frost = cfg.baseFrost.Value;
+                        sharedData.m_damages.m_lightning = cfg.baseLightning.Value;
+                        sharedData.m_damages.m_poison = cfg.basePoison.Value;
+                        sharedData.m_damages.m_spirit = cfg.baseSpirit.Value;
+                        sharedData.m_damagesPerLevel.m_damage = cfg.baseDamagePerPerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_blunt = cfg.baseBluntPerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_slash = cfg.baseSlashPerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_pierce = cfg.basePiercePerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_chop = cfg.baseChopPerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_pickaxe = cfg.basePickaxePerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_fire = cfg.baseFirePerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_frost = cfg.baseFrostPerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_lightning = cfg.baseLightningPerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_poison = cfg.basePoisonPerLevel.Value;
+                        sharedData.m_damagesPerLevel.m_spirit = cfg.baseSpiritPerLevel.Value;
+                        sharedData.m_attackForce = cfg.baseAttackForce.Value;
+                        sharedData.m_blockPower = cfg.baseBlockPower.Value;
+                        sharedData.m_deflectionForce = cfg.baseParryForce.Value;
+                        sharedData.m_backstabBonus = cfg.baseBackstab.Value;
                     }
                 }
             }
@@ -980,6 +1135,14 @@ public static class PrefabManager
         foreach (GameObject prefab in prefabs.Concat(ZnetOnlyPrefabs))
         {
             __instance.m_prefabs.Add(prefab);
+            if (prefab.GetComponent<ItemDrop>())
+            {
+                var test = Item.itemDropMap[prefab.GetComponent<ItemDrop>()];
+                var config = Item.itemConfigMap[test];
+                
+            }
         }
+        
+        
     }
 }
