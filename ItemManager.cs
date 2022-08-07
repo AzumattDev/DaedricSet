@@ -305,16 +305,16 @@ public class Item
 
                         List<ConfigurationManagerAttributes> hideWhenNoneAttributes = new();
 
-                        cfg.table = config(englishName, "Crafting Station" + configSuffix,
+                        cfg.table = config(localizedName, "Crafting Station" + configSuffix,
                             item.Recipes[configKey].Crafting.Stations.First().Table,
-                            new ConfigDescription($"Crafting station where {englishName} is available.", null,
+                            new ConfigDescription($"Crafting station where {localizedName} is available.", null,
                                 new ConfigurationManagerAttributes { Order = --order, Category = localizedName }));
                         ConfigurationManagerAttributes customTableAttributes = new()
                         {
                             Order = --order, Browsable = cfg.table.Value == CraftingTable.Custom,
                             Category = localizedName
                         };
-                        cfg.customTable = config(englishName, "Custom Crafting Station" + configSuffix,
+                        cfg.customTable = config(localizedName, "Custom Crafting Station" + configSuffix,
                             item.Recipes[configKey].Crafting.Stations.First().custom ?? "",
                             new ConfigDescription("", null, customTableAttributes));
 
@@ -359,9 +359,9 @@ public class Item
                             Order = --order, Browsable = cfg.table.Value != CraftingTable.None, Category = localizedName
                         };
                         hideWhenNoneAttributes.Add(tableLevelAttributes);
-                        cfg.tableLevel = config(englishName, "Crafting Station Level" + configSuffix,
+                        cfg.tableLevel = config(localizedName, "Crafting Station Level" + configSuffix,
                             item.Recipes[configKey].Crafting.Stations.First().level,
-                            new ConfigDescription($"Required crafting station level to craft {englishName}.", null,
+                            new ConfigDescription($"Required crafting station level to craft {localizedName}.", null,
                                 tableLevelAttributes));
                         cfg.tableLevel.SettingChanged += (_, _) =>
                         {
@@ -373,13 +373,13 @@ public class Item
                         };
                         if (item.Prefab.GetComponent<ItemDrop>().m_itemData.m_shared.m_maxQuality > 1)
                         {
-                            cfg.maximumTableLevel = config(englishName, "Maximum Crafting Station Level" + configSuffix,
+                            cfg.maximumTableLevel = config(localizedName, "Maximum Crafting Station Level" + configSuffix,
                                 item.MaximumRequiredStationLevel == int.MaxValue
                                     ? item.Recipes[configKey].Crafting.Stations.First().level +
                                     item.Prefab.GetComponent<ItemDrop>().m_itemData.m_shared.m_maxQuality - 1
                                     : item.MaximumRequiredStationLevel,
                                 new ConfigDescription(
-                                    $"Maximum crafting station level to upgrade and repair {englishName}.", null,
+                                    $"Maximum crafting station level to upgrade and repair {localizedName}.", null,
                                     tableLevelAttributes));
                         }
 
@@ -391,17 +391,17 @@ public class Item
                                 Browsable = cfg.table.Value != CraftingTable.None, Category = localizedName
                             };
                             hideWhenNoneAttributes.Add(attributes);
-                            return config(englishName, name, value, new ConfigDescription(desc, null, attributes));
+                            return config(localizedName, name, value, new ConfigDescription(desc, null, attributes));
                         }
 
                         cfg.craft = itemConfig("Crafting Costs" + configSuffix,
                             new SerializedRequirements(item.Recipes[configKey].RequiredItems.Requirements).ToString(),
-                            $"Item costs to craft {englishName}");
+                            $"Item costs to craft {localizedName}");
                         if (item.Prefab.GetComponent<ItemDrop>().m_itemData.m_shared.m_maxQuality > 1)
                         {
                             cfg.upgrade = itemConfig("Upgrading Costs" + configSuffix,
                                 new SerializedRequirements(item.Recipes[configKey].RequiredUpgradeItems.Requirements)
-                                    .ToString(), $"Item costs per level to upgrade {englishName}");
+                                    .ToString(), $"Item costs per level to upgrade {localizedName}");
                         }
 
                         void ConfigChanged(object o, EventArgs e)
