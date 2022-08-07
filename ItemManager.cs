@@ -1135,12 +1135,6 @@ public static class PrefabManager
         foreach (GameObject prefab in prefabs.Concat(ZnetOnlyPrefabs))
         {
             __instance.m_prefabs.Add(prefab);
-            if (prefab.GetComponent<ItemDrop>())
-            {
-                var test = Item.itemDropMap[prefab.GetComponent<ItemDrop>()];
-                var config = Item.itemConfigMap[test];
-                
-            }
         }
         
         
