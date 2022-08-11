@@ -108,6 +108,10 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include=".gitignore" />
+        <Content Include="Thunderstore\DaedricSet.dll" />
+        <Content Include="Thunderstore\icon.png" />
+        <Content Include="Thunderstore\manifest.json" />
+        <Content Include="Thunderstore\README.md" />
         <EmbeddedResource Include="assets\daedricweapons" />
         <Content Include="ILRepack.targets" />
         <Content Include="Libs\ServerSync.dll">
