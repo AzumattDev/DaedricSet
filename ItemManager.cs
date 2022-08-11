@@ -502,11 +502,15 @@ public class Item
                             SetUpDamageValues(weapon.m_itemData);
                         }
 
-                        foreach (ItemDrop.ItemData? invWeaponData in Player.m_localPlayer.GetInventory().GetAllItems()
-                                     .Where(i =>
-                                         i.m_shared.m_name == itmdrop.m_itemData.m_shared.m_name))
+                        if (Player.m_localPlayer != null)
                         {
-                            SetUpDamageValues(invWeaponData);
+                            foreach (ItemDrop.ItemData? invWeaponData in Player.m_localPlayer.GetInventory()
+                                         .GetAllItems()
+                                         .Where(i =>
+                                             i.m_shared.m_name == itmdrop.m_itemData.m_shared.m_name))
+                            {
+                                SetUpDamageValues(invWeaponData);
+                            }
                         }
                     }
 
