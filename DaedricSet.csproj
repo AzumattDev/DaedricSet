@@ -108,6 +108,7 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include=".gitignore" />
+        <Content Include="README.md" />
         <Content Include="Thunderstore\DaedricSet.dll" />
         <Content Include="Thunderstore\icon.png" />
         <Content Include="Thunderstore\manifest.json" />
