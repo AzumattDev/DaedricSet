@@ -14,7 +14,7 @@ namespace DaedricSet
     public class DaedricSetPlugin : BaseUnityPlugin
     {
         internal const string ModName = "DaedricSet";
-        internal const string ModVersion = "1.0.0";
+        internal const string ModVersion = "1.0.1";
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
         private static string ConfigFileName = ModGUID + ".cfg";
@@ -43,7 +43,6 @@ namespace DaedricSet
             DaedricBattleAxe.RequiredItems.Add("Silver", 40);
             DaedricBattleAxe.RequiredUpgradeItems.Add("Iron", 20);
             DaedricBattleAxe.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricBattleAxe.GenerateWeaponConfigs = true;
 
             Item DaedricDagger = new("daedricweapons", "DaedricDagger");
             DaedricDagger.Name.English("Daedric Dagger");
@@ -54,7 +53,6 @@ namespace DaedricSet
             DaedricDagger.RequiredUpgradeItems.Add("Iron", 20);
             DaedricDagger.RequiredUpgradeItems.Add("Silver", 10);
             DaedricDagger.CraftAmount = 2;
-            DaedricDagger.GenerateWeaponConfigs = true;
 
             Item DaedricGlaive = new("daedricweapons", "DaedricGlaive");
             DaedricGlaive.Name.English("Daedric Glaive");
@@ -64,7 +62,6 @@ namespace DaedricSet
             DaedricGlaive.RequiredItems.Add("Silver", 40);
             DaedricGlaive.RequiredUpgradeItems.Add("Iron", 20);
             DaedricGlaive.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricGlaive.GenerateWeaponConfigs = true;
 
             Item DaedricGreatsword = new("daedricweapons", "DaedricGreatsword");
             DaedricGreatsword.Name.English("Daedric Greatsword");
@@ -74,7 +71,6 @@ namespace DaedricSet
             DaedricGreatsword.RequiredItems.Add("Silver", 40);
             DaedricGreatsword.RequiredUpgradeItems.Add("Iron", 20);
             DaedricGreatsword.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricGreatsword.GenerateWeaponConfigs = true;
 
 
             Item DaedricHalberd = new("daedricweapons", "DaedricHalberd");
@@ -85,7 +81,6 @@ namespace DaedricSet
             DaedricHalberd.RequiredItems.Add("Silver", 40);
             DaedricHalberd.RequiredUpgradeItems.Add("Iron", 20);
             DaedricHalberd.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricHalberd.GenerateWeaponConfigs = true;
 
             Item DaedricHatchet = new("daedricweapons", "DaedricHatchet");
             DaedricHatchet.Name.English("Daedric Hatchet");
@@ -96,7 +91,6 @@ namespace DaedricSet
             DaedricHatchet.RequiredUpgradeItems.Add("Iron", 20);
             DaedricHatchet.RequiredUpgradeItems.Add("Silver", 10);
             DaedricHatchet.CraftAmount = 2;
-            DaedricHatchet.GenerateWeaponConfigs = true;
 
             Item DaedricSkeletonClub = new("daedricweapons", "DaedricSkeletonClub");
             DaedricSkeletonClub.Name.English("Daedric Skeleton Club");
@@ -106,7 +100,6 @@ namespace DaedricSet
             DaedricSkeletonClub.RequiredItems.Add("Silver", 40);
             DaedricSkeletonClub.RequiredUpgradeItems.Add("Iron", 20);
             DaedricSkeletonClub.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricSkeletonClub.GenerateWeaponConfigs = true;
 
             Item DaedricMace = new("daedricweapons", "DaedricMace");
             DaedricMace.Name.English("Daedric Mace");
@@ -116,7 +109,6 @@ namespace DaedricSet
             DaedricMace.RequiredItems.Add("Silver", 40);
             DaedricMace.RequiredUpgradeItems.Add("Iron", 20);
             DaedricMace.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricMace.GenerateWeaponConfigs = true;
 
             /*Item DaedricShortSpear = new("daedricweapons", "DaedricShortSpear");
             DaedricShortSpear.Name.English("Daedric Short Spear"); 
@@ -154,7 +146,6 @@ namespace DaedricSet
             DaedricSword.RequiredItems.Add("Silver", 40);
             DaedricSword.RequiredUpgradeItems.Add("Iron", 20);
             DaedricSword.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricSword.GenerateWeaponConfigs = true;
 
             /*Item DaedricWarAxe = new("daedricweapons", "DaedricWarAxe");
             DaedricWarAxe.Name.English("Daedric Sword"); 
