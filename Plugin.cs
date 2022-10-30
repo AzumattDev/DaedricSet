@@ -14,7 +14,7 @@ namespace DaedricSet
     public class DaedricSetPlugin : BaseUnityPlugin
     {
         internal const string ModName = "DaedricSet";
-        internal const string ModVersion = "1.0.0";
+        internal const string ModVersion = "1.1.0";
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
         private static string ConfigFileName = ModGUID + ".cfg";
@@ -29,11 +29,19 @@ namespace DaedricSet
 
         private static readonly ConfigSync ConfigSync = new(ModGUID)
             { DisplayName = ModName, CurrentVersion = ModVersion, MinimumRequiredVersion = ModVersion };
+        
+        public enum Toggle
+        {
+            On = 1,
+            Off = 0
+        }
 
         public void Awake()
         {
-            _serverConfigLocked = config("General", "Force Server Config", true, "Force Server Config");
+            _serverConfigLocked = config("1 - General", "Lock Configuration", Toggle.On, "If on, the configuration is locked and can be changed by server admins only.");
             _ = ConfigSync.AddLockingConfigEntry(_serverConfigLocked);
+
+            LoadDaedricBow();
 
             Item DaedricBattleAxe = new("daedricweapons", "DaedricBattleaxe");
             DaedricBattleAxe.Name.English("Daedric Battle Axe");
@@ -43,7 +51,6 @@ namespace DaedricSet
             DaedricBattleAxe.RequiredItems.Add("Silver", 40);
             DaedricBattleAxe.RequiredUpgradeItems.Add("Iron", 20);
             DaedricBattleAxe.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricBattleAxe.GenerateWeaponConfigs = true;
 
             Item DaedricDagger = new("daedricweapons", "DaedricDagger");
             DaedricDagger.Name.English("Daedric Dagger");
@@ -54,7 +61,6 @@ namespace DaedricSet
             DaedricDagger.RequiredUpgradeItems.Add("Iron", 20);
             DaedricDagger.RequiredUpgradeItems.Add("Silver", 10);
             DaedricDagger.CraftAmount = 2;
-            DaedricDagger.GenerateWeaponConfigs = true;
 
             Item DaedricGlaive = new("daedricweapons", "DaedricGlaive");
             DaedricGlaive.Name.English("Daedric Glaive");
@@ -64,7 +70,6 @@ namespace DaedricSet
             DaedricGlaive.RequiredItems.Add("Silver", 40);
             DaedricGlaive.RequiredUpgradeItems.Add("Iron", 20);
             DaedricGlaive.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricGlaive.GenerateWeaponConfigs = true;
 
             Item DaedricGreatsword = new("daedricweapons", "DaedricGreatsword");
             DaedricGreatsword.Name.English("Daedric Greatsword");
@@ -74,7 +79,6 @@ namespace DaedricSet
             DaedricGreatsword.RequiredItems.Add("Silver", 40);
             DaedricGreatsword.RequiredUpgradeItems.Add("Iron", 20);
             DaedricGreatsword.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricGreatsword.GenerateWeaponConfigs = true;
 
 
             Item DaedricHalberd = new("daedricweapons", "DaedricHalberd");
@@ -85,7 +89,6 @@ namespace DaedricSet
             DaedricHalberd.RequiredItems.Add("Silver", 40);
             DaedricHalberd.RequiredUpgradeItems.Add("Iron", 20);
             DaedricHalberd.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricHalberd.GenerateWeaponConfigs = true;
 
             Item DaedricHatchet = new("daedricweapons", "DaedricHatchet");
             DaedricHatchet.Name.English("Daedric Hatchet");
@@ -96,7 +99,6 @@ namespace DaedricSet
             DaedricHatchet.RequiredUpgradeItems.Add("Iron", 20);
             DaedricHatchet.RequiredUpgradeItems.Add("Silver", 10);
             DaedricHatchet.CraftAmount = 2;
-            DaedricHatchet.GenerateWeaponConfigs = true;
 
             Item DaedricSkeletonClub = new("daedricweapons", "DaedricSkeletonClub");
             DaedricSkeletonClub.Name.English("Daedric Skeleton Club");
@@ -106,7 +108,6 @@ namespace DaedricSet
             DaedricSkeletonClub.RequiredItems.Add("Silver", 40);
             DaedricSkeletonClub.RequiredUpgradeItems.Add("Iron", 20);
             DaedricSkeletonClub.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricSkeletonClub.GenerateWeaponConfigs = true;
 
             Item DaedricMace = new("daedricweapons", "DaedricMace");
             DaedricMace.Name.English("Daedric Mace");
@@ -116,7 +117,6 @@ namespace DaedricSet
             DaedricMace.RequiredItems.Add("Silver", 40);
             DaedricMace.RequiredUpgradeItems.Add("Iron", 20);
             DaedricMace.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricMace.GenerateWeaponConfigs = true;
 
             /*Item DaedricShortSpear = new("daedricweapons", "DaedricShortSpear");
             DaedricShortSpear.Name.English("Daedric Short Spear"); 
@@ -154,7 +154,6 @@ namespace DaedricSet
             DaedricSword.RequiredItems.Add("Silver", 40);
             DaedricSword.RequiredUpgradeItems.Add("Iron", 20);
             DaedricSword.RequiredUpgradeItems.Add("Silver", 10);
-            DaedricSword.GenerateWeaponConfigs = true;
 
             /*Item DaedricWarAxe = new("daedricweapons", "DaedricWarAxe");
             DaedricWarAxe.Name.English("Daedric Sword"); 
@@ -210,11 +209,32 @@ namespace DaedricSet
                 DaedricSetLogger.LogError("Please check your config entries for spelling and format!");
             }
         }
+        
+        private void LoadDaedricBow()
+        {
+            Item daedricbow = new("AssetsEmbedded.daedricbow", "daedricbow");
+            daedricbow.Name.English("Daedric Bow"); // You can use this to fix the display name in code
+            daedricbow.Description.English("");
+            daedricbow.Crafting.Add(CraftingTable.Forge, 2); // Custom crafting stations can be specified as a string
+            daedricbow.MaximumRequiredStationLevel =
+                2; // Limits the crafting station level required to upgrade or repair the item to 5
+            daedricbow.RequiredItems.Add("TrophySurtling", 5);
+            daedricbow.RequiredItems.Add("Obsidian", 20);
+            daedricbow.RequiredItems.Add("Flametal", 100);
+            daedricbow.RequiredUpgradeItems.Add("TrophySurtling",
+                25); // Upgrade requirements are per item, even if you craft two at the same time
+            daedricbow.RequiredUpgradeItems.Add("Obsidian",
+                150); // 10 Silver: You need 10 silver for level 2, 20 silver for level 3, 30 silver for level 4
+            daedricbow.RequiredUpgradeItems.Add("Flametal", 75);
+
+            ItemDrop? Bow = daedricbow.Prefab.GetComponent<ItemDrop>();
+            Bow.m_itemData.m_shared.m_ammoType = "$ammo_arrows";
+        }
 
 
         #region ConfigOptions
 
-        private static ConfigEntry<bool>? _serverConfigLocked;
+        private static ConfigEntry<Toggle> _serverConfigLocked = null!;
 
         private ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description,
             bool synchronizedSetting = true)
