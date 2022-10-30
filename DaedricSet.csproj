@@ -111,6 +111,7 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include=".gitignore" />
+        <EmbeddedResource Include="assets\AssetsEmbedded.daedricbow" />
         <Content Include="Thunderstore\DaedricSet.dll" />
         <Content Include="Thunderstore\DaedricSet.zip" />
         <Content Include="Thunderstore\icon.png" />
