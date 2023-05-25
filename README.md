@@ -50,15 +50,3 @@ For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
 
 [![https://i.imgur.com/XXP6HCU.png](https://i.imgur.com/XXP6HCU.png)](https://discord.gg/Pb6bVMnFb2)
 <a href="https://discord.gg/pdHgy6Bsng"><img src="https://i.imgur.com/Xlcbmm9.png" href="https://discord.gg/pdHgy6Bsng" width="175" height="175"></a>
-***
-> # Update Information (Latest listed first)
-> > ## 1.1.3
-> - Fix for Harmony bug
-> ## 1.1.2
-> - Fix for Mistlands
-> ## 1.1.0
-> - Merge DaedricBow mod into this one. I was maintaining it anyways.
-> ## 1.0.1
-> - Update ServerSync and ItemManager
-> ### v1.0.0
-> - Initial Release
