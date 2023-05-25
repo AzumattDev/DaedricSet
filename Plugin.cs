@@ -14,7 +14,7 @@ namespace DaedricSet
     public class DaedricSetPlugin : BaseUnityPlugin
     {
         internal const string ModName = "DaedricSet";
-        internal const string ModVersion = "1.1.1";
+        internal const string ModVersion = "1.1.5";
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
         private static string ConfigFileName = ModGUID + ".cfg";
@@ -172,6 +172,70 @@ namespace DaedricSet
             DaedricWarHammer.RequiredItems.Add("Silver", 40);
             DaedricWarHammer.RequiredUpgradeItems.Add("Iron", 20); 
             DaedricWarHammer.RequiredUpgradeItems.Add("Silver", 10);*/
+            
+            Item DaedricChest = new("daedrictest", "ArmorDaedricChest");
+            DaedricChest.Name.English("Daedric Chest"); 
+            DaedricChest.Description.English("A work in progress Daedric Armor piece.");
+            DaedricChest.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricChest.RequiredItems.Add("Iron", 40);
+            DaedricChest.RequiredItems.Add("Silver", 40);
+            DaedricChest.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricChest.RequiredUpgradeItems.Add("Silver", 10);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricChest.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            
+            Item DaedricLegs = new("daedrictest", "ArmorDaedricLegs");
+            DaedricLegs.Name.English("Daedric Legs"); 
+            DaedricLegs.Description.English("A work in progress Daedric Armor piece.");
+            DaedricLegs.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricLegs.RequiredItems.Add("Iron", 40);
+            DaedricLegs.RequiredItems.Add("Silver", 40);
+            DaedricLegs.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricLegs.RequiredUpgradeItems.Add("Silver", 10);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricLegs.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            
+            Item DaedricHelmet = new("daedrictest", "HelmetDaedric");
+            DaedricHelmet.Name.English("Daedric Helmet"); 
+            DaedricHelmet.Description.English("A work in progress Daedric Armor piece.");
+            DaedricHelmet.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricHelmet.RequiredItems.Add("Iron", 40);
+            DaedricHelmet.RequiredItems.Add("Silver", 40);
+            DaedricHelmet.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricHelmet.RequiredUpgradeItems.Add("Silver", 10);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricHelmet.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            
+            
+            
+            
+            
+            Item DaedricChestFem = new("daedrictest", "ArmorDaedricChestFemale");
+            DaedricChestFem.Name.English("Daedric Chest Female"); 
+            DaedricChestFem.Description.English("A work in progress Daedric Armor piece. (Female)");
+            DaedricChestFem.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricChestFem.RequiredItems.Add("Iron", 40);
+            DaedricChestFem.RequiredItems.Add("Silver", 40);
+            DaedricChestFem.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricChestFem.RequiredUpgradeItems.Add("Silver", 10);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricChest.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            
+            Item DaedricLegsFem = new("daedrictest", "ArmorDaedricLegsFemale");
+            DaedricLegsFem.Name.English("Daedric Legs Female"); 
+            DaedricLegsFem.Description.English("A work in progress Daedric Armor piece. (Female)");
+            DaedricLegsFem.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricLegsFem.RequiredItems.Add("Iron", 40);
+            DaedricLegsFem.RequiredItems.Add("Silver", 40);
+            DaedricLegsFem.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricLegsFem.RequiredUpgradeItems.Add("Silver", 10);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricLegs.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            
+            Item DaedricHelmetFem = new("daedrictest", "HelmetDaedricFemale");
+            DaedricHelmetFem.Name.English("Daedric Helmet Female"); 
+            DaedricHelmetFem.Description.English("A work in progress Daedric Armor piece. (Female)");
+            DaedricHelmetFem.Crafting.Add(CraftingTable.Forge,3); 
+            DaedricHelmetFem.RequiredItems.Add("Iron", 40);
+            DaedricHelmetFem.RequiredItems.Add("Silver", 40);
+            DaedricHelmetFem.RequiredUpgradeItems.Add("Iron", 20); 
+            DaedricHelmetFem.RequiredUpgradeItems.Add("Silver", 10);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricHelmet.Prefab, MaterialReplacer.ShaderType.PlayerShader);
 
 
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -212,9 +276,9 @@ namespace DaedricSet
         
         private void LoadDaedricBow()
         {
-            Item daedricbow = new("AssetsEmbedded.daedricbow", "daedricbow");
+            Item daedricbow = new("daedricbow", "DaedricBow");
             daedricbow.Name.English("Daedric Bow"); // You can use this to fix the display name in code
-            daedricbow.Description.English("");
+            daedricbow.Description.English("A daedric bow from skyrim.");
             daedricbow.Crafting.Add(CraftingTable.Forge, 2); // Custom crafting stations can be specified as a string
             daedricbow.MaximumRequiredStationLevel =
                 2; // Limits the crafting station level required to upgrade or repair the item to 5
@@ -226,9 +290,6 @@ namespace DaedricSet
             daedricbow.RequiredUpgradeItems.Add("Obsidian",
                 150); // 10 Silver: You need 10 silver for level 2, 20 silver for level 3, 30 silver for level 4
             daedricbow.RequiredUpgradeItems.Add("Flametal", 75);
-
-            ItemDrop? Bow = daedricbow.Prefab.GetComponent<ItemDrop>();
-            Bow.m_itemData.m_shared.m_ammoType = "$ammo_arrows";
         }
 
 
@@ -265,5 +326,21 @@ namespace DaedricSet
         }
 
         #endregion
+    }
+    
+    
+    [HarmonyPatch(typeof(ZNetScene),nameof(ZNetScene.Awake))]
+    static class EffectFixZNetSceneAwakePatch
+    {
+        static void Postfix(ZNetScene __instance)
+        {
+            var daedricBowItemDrop = __instance.GetPrefab("DaedricBow").GetComponent<ItemDrop>();
+            var bowDraugrFangItemDrop = __instance.GetPrefab("BowDraugrFang").GetComponent<ItemDrop>();
+            
+            // Swap out the trigger effects on the DaedricBow with that from the DraugrFangBow
+            daedricBowItemDrop.m_itemData.m_shared.m_holdStartEffect = bowDraugrFangItemDrop.m_itemData.m_shared.m_holdStartEffect;
+            daedricBowItemDrop.m_itemData.m_shared.m_blockEffect = bowDraugrFangItemDrop.m_itemData.m_shared.m_blockEffect;
+            daedricBowItemDrop.m_itemData.m_shared.m_triggerEffect = bowDraugrFangItemDrop.m_itemData.m_shared.m_triggerEffect;
+        }
     }
 }
