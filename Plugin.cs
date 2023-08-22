@@ -5,6 +5,7 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using ItemManager;
+using PieceManager;
 using ServerSync;
 using UnityEngine;
 
@@ -181,7 +182,7 @@ namespace DaedricSet
             DaedricChest.RequiredItems.Add("Silver", 40);
             DaedricChest.RequiredUpgradeItems.Add("Iron", 20); 
             DaedricChest.RequiredUpgradeItems.Add("Silver", 10);
-            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricChest.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricChest.Prefab, MaterialReplacer.ShaderType.CustomCreature);
             
             Item DaedricLegs = new("daedrictest", "ArmorDaedricLegs");
             DaedricLegs.Name.English("Daedric Legs"); 
@@ -191,7 +192,7 @@ namespace DaedricSet
             DaedricLegs.RequiredItems.Add("Silver", 40);
             DaedricLegs.RequiredUpgradeItems.Add("Iron", 20); 
             DaedricLegs.RequiredUpgradeItems.Add("Silver", 10);
-            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricLegs.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricLegs.Prefab, MaterialReplacer.ShaderType.CustomCreature);
             
             Item DaedricHelmet = new("daedrictest", "HelmetDaedric");
             DaedricHelmet.Name.English("Daedric Helmet"); 
@@ -201,7 +202,7 @@ namespace DaedricSet
             DaedricHelmet.RequiredItems.Add("Silver", 40);
             DaedricHelmet.RequiredUpgradeItems.Add("Iron", 20); 
             DaedricHelmet.RequiredUpgradeItems.Add("Silver", 10);
-            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricHelmet.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricHelmet.Prefab, MaterialReplacer.ShaderType.CustomCreature);
             
             
             
@@ -215,7 +216,7 @@ namespace DaedricSet
             DaedricChestFem.RequiredItems.Add("Silver", 40);
             DaedricChestFem.RequiredUpgradeItems.Add("Iron", 20); 
             DaedricChestFem.RequiredUpgradeItems.Add("Silver", 10);
-            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricChest.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricChest.Prefab, MaterialReplacer.ShaderType.CustomCreature);
             
             Item DaedricLegsFem = new("daedrictest", "ArmorDaedricLegsFemale");
             DaedricLegsFem.Name.English("Daedric Legs Female"); 
@@ -225,7 +226,7 @@ namespace DaedricSet
             DaedricLegsFem.RequiredItems.Add("Silver", 40);
             DaedricLegsFem.RequiredUpgradeItems.Add("Iron", 20); 
             DaedricLegsFem.RequiredUpgradeItems.Add("Silver", 10);
-            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricLegs.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricLegs.Prefab, MaterialReplacer.ShaderType.CustomCreature);
             
             Item DaedricHelmetFem = new("daedrictest", "HelmetDaedricFemale");
             DaedricHelmetFem.Name.English("Daedric Helmet Female"); 
@@ -235,7 +236,7 @@ namespace DaedricSet
             DaedricHelmetFem.RequiredItems.Add("Silver", 40);
             DaedricHelmetFem.RequiredUpgradeItems.Add("Iron", 20); 
             DaedricHelmetFem.RequiredUpgradeItems.Add("Silver", 10);
-            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricHelmet.Prefab, MaterialReplacer.ShaderType.PlayerShader);
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(DaedricHelmet.Prefab, MaterialReplacer.ShaderType.CustomCreature);
 
 
             Assembly assembly = Assembly.GetExecutingAssembly();
