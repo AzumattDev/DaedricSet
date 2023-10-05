@@ -15,7 +15,7 @@ namespace DaedricSet
     public class DaedricSetPlugin : BaseUnityPlugin
     {
         internal const string ModName = "DaedricSet";
-        internal const string ModVersion = "1.1.5";
+        internal const string ModVersion = "1.1.7";
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
         private static string ConfigFileName = ModGUID + ".cfg";

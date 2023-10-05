@@ -116,6 +116,9 @@
         <Reference Include="UnityEngine.UI">
             <HintPath>$(CorlibPath)\UnityEngine.UI.dll</HintPath>
         </Reference>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>$(GamePath)\valheim_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ItemManager.cs"/>
@@ -126,7 +129,7 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include=".gitignore"/>
-        <Content Include="environment.props" />
+        <Content Include="environment.props"/>
         <Content Include="Thunderstore\CHANGELOG.md"/>
         <Content Include="Thunderstore\README.md"/>
         <Content Include="UpdateManifest.ps1"/>
